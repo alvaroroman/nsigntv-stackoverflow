@@ -1,0 +1,8 @@
+bigquery_data:
+    path: /api/bigquery_data
+    controller: App\Controller\BigQueryController::getData
+    methods: GET
+bigquery_tag:
+    path: /api/bigquery_tag/{tag}
+    controller: App\Controller\BigQueryController::getDataByTag
+    methods: GET
