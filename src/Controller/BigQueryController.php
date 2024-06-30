@@ -16,8 +16,8 @@ class BigQueryController extends AbstractController
     public function getData(BigQueryService $bigQueryService): JsonResponse
     {
         try {
-            // Consulta SQL
-            $query = "SELECT title, body, tags, creation_date
+            // Consulta SQL que devuelve los últimos 10 registros públicos de StackOverflow
+            $query = "SELECT title, body, tags, FORMAT_TIMESTAMP('%Y-%m-%d %H:%M:%S', creation_date) as creation_date
                     FROM `bigquery-public-data.stackoverflow.posts_questions`
                     ORDER BY creation_date DESC
                     LIMIT 10";
@@ -38,11 +38,11 @@ class BigQueryController extends AbstractController
     public function getDataByTag(BigQueryService $bigQueryService, string $tag): JsonResponse
     {
         try {
-            // Consulta SQL. Se usa 'sprintf' para evitar cualquier tipo de ataque de inyección SQL
+            // Consulta SQL que devuelve los 10 últmos registros públicos de StackOverflow pasando por como parámetro un etiqueta. Se usa 'sprintf' para evitar cualquier tipo de ataque de inyección SQL
             $query = sprintf(
-                "SELECT title, body, tags, creation_date
+                "SELECT title, body, tags, FORMAT_TIMESTAMP('%%Y-%%m-%%d %%H:%%M:%%S', creation_date) as creation_date
                  FROM `bigquery-public-data.stackoverflow.posts_questions`
-                 WHERE tags LIKE '%%%s%%'
+                 WHERE tags like '%%%s%%'
                  ORDER BY creation_date DESC
                  LIMIT 10",
                 $tag
